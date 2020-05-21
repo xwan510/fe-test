@@ -7,23 +7,30 @@
           <!-- DA Stage -->
           <b-form-group label="DA Stages">
             <b-form-checkbox-group
-              v-model="filterValues.stages"
+              id="stage-input"
+              v-model="stages"
               :options="filterOptions.stages"
               plain
               stacked
               name="da-approval"
+              @change="onSubmit"
             ></b-form-checkbox-group>
           </b-form-group>
           <!-- Title -->
           <b-form-group label="Title">
             <b-form-input
+              id="title-input"
               list="title-list-id"
               placeholder="Enter title"
-              v-model="filterValues.title"
+              v-model="title"
               :formatter="toUpperCase"
+              @input="onSubmit"
             ></b-form-input>
             <datalist id="title-list-id">
-              <option v-for="(title, index) in filterOptions.titles" :key="index">{{ title }}</option>
+              <option
+                v-for="(title, index) in filterOptions.titles"
+                :key="index">{{ title }}
+              </option>
             </datalist>
           </b-form-group>
         </b-form>
@@ -40,13 +47,13 @@ export default {
   },
   data() {
     return {
-      filterValues: {
-        stages: [],
-        title: null,
-      },
+      // Form values to submit to parent.
+      title: null,
+      stages: [],
     };
   },
   computed: {
+    // Available options to populate the form.
     filterOptions() {
       // DA Approval stages.
       let stages = null;
@@ -57,7 +64,7 @@ export default {
         }));
       }
       // Titles.
-      let titles = this.options.titles ? this.options.titles : null;
+      const titles = this.options.titles ? this.options.titles : null;
 
       const options = {
         stages,
@@ -66,26 +73,16 @@ export default {
       return options;
     },
   },
-  watch: {
-    filterValues: {
-      handler(data) {
-        // If any filters changes, pass it to App.
-        if (data) {
-          this.emitChanges(data);
-        }
-      },
-      deep: true, // Deep check for every value changes.
-    },
-  },
   methods: {
     toUpperCase(value) {
       return value.toUpperCase();
     },
-    emitChanges(data) {
-      this.$emit('filters-changed', data);
-    },
     onSubmit() {
-      this.emitChanges(this.filterValues);
+      const data = {
+        stages: this.stages,
+        title: this.title,
+      };
+      this.$emit('filters-changed', data);
     },
   },
 };

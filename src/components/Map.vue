@@ -27,6 +27,7 @@ import * as Constants from '../constants';
 
 // Map component.
 export default {
+  name: 'Map',
   components: {
     MglMap,
     MglNavigationControl,

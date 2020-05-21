@@ -14,8 +14,8 @@
       <Map :geojsonData="geojsonData" />
       <!-- Error modal -->
       <b-modal id="modal-1" title="Error" ok-only v-model="showError">
-      <p class="my-4">Failed to load geojson data.</p>
-  </b-modal>
+        <p class="my-4">Failed to load geojson data.</p>
+      </b-modal>
     </main>
   </div>
 </template>
@@ -66,7 +66,6 @@ export default {
       response = await axios.get(GEOJSON_LOCATION);
     } catch (error) {
       this.showError = true;
-      console.log(error);
       return;
     }
 
