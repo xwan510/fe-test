@@ -1,0 +1,12 @@
+checks:
+    javascript: true
+filter:
+    excluded_paths:
+        - "tests/"
+        - "node_modules/"
+build:
+    environment:
+        node: '9'
+    tests:
+        override:
+            - command: 'npm run test:unit'
