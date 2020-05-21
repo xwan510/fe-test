@@ -4,7 +4,7 @@
 
 This is a test project using Vue + Mapbox to showcase map interactions with geojson source data.
 
-Live site is deployed to netlify [here](https://5ec66560cc94270006009900--serene-shirley-97e865.netlify.app/)
+Live site is deployed to netlify [here](https://serene-shirley-97e865.netlify.app)
 
 ## Design considerations
 
