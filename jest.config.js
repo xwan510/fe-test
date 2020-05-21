@@ -6,7 +6,7 @@ module.exports = {
     '!src/main.js', // No need to cover bootstrap file
     '!src/plugins/*', // No need to cover bootstrap file
   ],
-  "moduleNameMapper":{
-        "\\.(css|less|scss|sass)$": "identity-obj-proxy" 
+  moduleNameMapper: {
+    '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
   },
 };

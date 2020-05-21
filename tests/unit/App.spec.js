@@ -1,12 +1,12 @@
 import { createLocalVue, shallowMount } from '@vue/test-utils';
 import BootstrapVue from 'bootstrap-vue';
-import * as axios from "axios";
+import * as axios from 'axios';
+import App from '@/App.vue';
 
 // A workaround to solve the mapbox-gl node module import bug.
 jest.mock('mapbox-gl/dist/mapbox-gl', () => ({
   Map: () => ({}),
 }));
-import App from '@/App.vue';
 
 let wrapper;
 jest.mock('axios');
@@ -24,8 +24,8 @@ beforeEach(() => {
               Stage: 'DA Approved',
               Title: 'HELLENIC CLUB',
               Value: '10.000',
-            }
-          }
+            },
+          },
         },
         {
           type: 'Feature',
@@ -34,8 +34,8 @@ beforeEach(() => {
               Stage: 'DA Pending',
               Title: 'WESTPAC PLACE',
               Value: '100.000',
-            }
-          }
+            },
+          },
         },
         {
           type: 'Feature',
@@ -44,11 +44,11 @@ beforeEach(() => {
               Stage: 'DA Approved',
               Title: 'WOW',
               Value: '1.000',
-            }
-          }
+            },
+          },
         },
-      ]
-    }
+      ],
+    },
   };
   axios.get.mockResolvedValue(mockGeojson);
 
@@ -61,14 +61,13 @@ beforeEach(() => {
 });
 
 afterEach(() => {
-    wrapper.destroy();
-    jest.clearAllMocks(); 
+  wrapper.destroy();
+  jest.clearAllMocks();
 });
 
 
 // Tests start.
 describe('App.vue', () => {
-
   it('fetches geojson file when mounted', (done) => {
     wrapper.vm.$nextTick(() => {
       expect(wrapper.vm.geojsonData).toBeTruthy();
@@ -78,11 +77,11 @@ describe('App.vue', () => {
 
   it('handles failed fetch', (done) => {
     // To mock failed response, we can remount App with failed mock fetch.
-    axios.get.mockImplementation(() => Promise.reject({ status: 404, data: {} }));
+    axios.get.mockImplementation(() => Promise.reject(new Error('something bad happened')));
     const localVue = createLocalVue();
     localVue.use(BootstrapVue);
-    const wrapper = shallowMount(App, { localVue });
-    wrapper.vm.$nextTick(() => {
+    const myWrapper = shallowMount(App, { localVue });
+    myWrapper.vm.$nextTick(() => {
       expect(wrapper.vm.showError).toEqual(true);
       done();
     });
@@ -93,8 +92,8 @@ describe('App.vue', () => {
     axios.get.mockImplementation(() => Promise.resolve({ status: 200, data: {} }));
     const localVue = createLocalVue();
     localVue.use(BootstrapVue);
-    const wrapper = shallowMount(App, { localVue });
-    wrapper.vm.$nextTick(() => {
+    const myWrapper = shallowMount(App, { localVue });
+    myWrapper.vm.$nextTick(() => {
       expect(wrapper.vm.showError).toEqual(true);
       done();
     });
@@ -102,7 +101,7 @@ describe('App.vue', () => {
 
   it('converts geojson to filter options', (done) => {
     wrapper.vm.$nextTick(() => {
-      const toMatchData = [{"text": "DA Approved", "value": "DA Approved"}, {"text": "DA Pending", "value": "DA Pending"}];
+      const toMatchData = [{ text: 'DA Approved', value: 'DA Approved' }, { text: 'DA Pending', value: 'DA Pending' }];
       expect(wrapper.vm.stageOptions)
         .toMatchObject(toMatchData);
       done();
@@ -132,7 +131,7 @@ describe('App.vue', () => {
 
   it('filters source json for title', (done) => {
     wrapper.vm.$nextTick(() => {
-      const filters = { title: 'WESTPAC PLACE'};
+      const filters = { title: 'WESTPAC PLACE' };
       wrapper.vm.handleFiltersChange(filters);
       expect(wrapper.vm.geojsonData.features)
         .toHaveLength(1);

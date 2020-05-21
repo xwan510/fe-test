@@ -10,10 +10,9 @@ const mountFiltersBar = (options) => {
     propsData: options,
     localVue,
   });
-}
+};
 
 describe('FiltersBar.vue', () => {
-
   it('renders props.stagesOptions when passed', () => {
     const options = {
       stageOptions: ['stage1', 'stage2'],
@@ -35,7 +34,7 @@ describe('FiltersBar.vue', () => {
       titleOptions: ['title1', 'title2'],
     };
     const wrapper = mountFiltersBar(options);
-    wrapper.find('form').trigger("submit");
+    wrapper.find('form').trigger('submit');
     expect(wrapper.emitted('filters-changed'))
       .toHaveLength(1);
   });
@@ -45,8 +44,8 @@ describe('FiltersBar.vue', () => {
       titleOptions: ['title1', 'title2'],
     };
     const wrapper = mountFiltersBar(options);
-    wrapper.setData({title: 'title1'});
-    wrapper.find('form').trigger("submit");
+    wrapper.setData({ title: 'title1' });
+    wrapper.find('form').trigger('submit');
     expect(wrapper.emitted('filters-changed')[0][0].title)
       .toMatch('title1');
   });
@@ -56,8 +55,8 @@ describe('FiltersBar.vue', () => {
       stageOptions: ['stage1', 'stage2'],
     };
     const wrapper = mountFiltersBar(options);
-    wrapper.setData({stages: ['stage1', 'stage2']});
-    wrapper.find('form').trigger("submit");
+    wrapper.setData({ stages: ['stage1', 'stage2'] });
+    wrapper.find('form').trigger('submit');
     expect(wrapper.emitted('filters-changed')[0][0].stages)
       .toEqual(expect.arrayContaining(['stage1', 'stage2']));
   });
