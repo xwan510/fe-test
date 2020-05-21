@@ -62,7 +62,7 @@ export default {
         source: Constants.SOURCEID,
         layout: {
           // Just use icon that is shipped with mapbox.
-          'icon-image': 'music-15',
+          'icon-image': 'embassy-15',
           // get the title name from the source's "title" property
           'text-field': ['get', 'Title', ['get', 'project']],
           'text-font': ['Open Sans Semibold', 'Arial Unicode MS Bold'],

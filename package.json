@@ -14,6 +14,7 @@
     "bootstrap": "^4.5.0",
     "bootstrap-vue": "^2.14.0",
     "core-js": "^3.6.4",
+    "lodash": "^4.17.15",
     "mapbox-gl": "^1.10.1",
     "mutationobserver-shim": "^0.3.3",
     "vue": "^2.6.11",

@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-button v-b-toggle.sidebar-1 class="fixed-top filter-button btn-md">Filters</b-button>
-    <b-sidebar id="sidebar-1" title="Apply Filters" width="250px" shadow>
+    <b-sidebar id="sidebar-1" title="Apply Filters" width="250px" backdrop shadow>
       <div class="px-4 py-3" id="x">
         <b-form @submit="onSubmit" @reset="onReset" >
           <!-- DA Stage -->
@@ -33,14 +33,14 @@
               </option>
             </datalist>
           </b-form-group>
-          <!-- Title -->
+          <!-- Value Range -->
           <b-form-group label="Value Range">
             <vue-slider
               v-model="valueRange"
               :min="valueOptions ? valueOptions.min : 0"
               :max="valueOptions ? valueOptions.max : 100"
               :interval="valueOptions ? valueOptions.interval : 1"
-              @drag-end="onSubmit"
+              @change="onSubmit"
             ></vue-slider>
           </b-form-group>
           <b-button type="reset" variant="danger">Reset</b-button>
@@ -53,6 +53,7 @@
 <script>
 import VueSlider from 'vue-slider-component';
 import 'vue-slider-component/theme/antd.css';
+import _ from 'lodash';
 
 export default {
   name: 'FiltersBar',
@@ -78,14 +79,15 @@ export default {
     toUpperCase(value) {
       return value.toUpperCase();
     },
-    onSubmit() {
+    onSubmit: _.debounce(function () {
       const data = {
         stages: this.stages,
         title: this.title,
         valueRange: this.valueRange,
       };
+      console.log('here');
       this.$emit('filters-changed', data);
-    },
+    }, 200),
     onReset() {
       this.title = null;
       this.stages = [];
@@ -99,7 +101,7 @@ export default {
 <style scoped>
   .filter-button {
     width: 160px;
-    top: 12%;
+    top: 14%;
     left: 1.5%;
   }
   div /deep/ .col-form-label {

@@ -142,7 +142,7 @@ export default {
     color: #2c3e50;
   }
   #app #app-header {
-    text-align: center;
-    padding: 1%;
+    text-align: left;
+    padding: 2%;
   }
 </style>
