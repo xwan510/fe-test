@@ -6,8 +6,10 @@
     <main>
       <!-- Filters Bar -->
       <FiltersBar
-        v-if="filterOptions"
-        :options="filterOptions"
+        v-if="stageOptions && titleOptions && valueOptions"
+        :stageOptions="stageOptions"
+        :titleOptions="titleOptions"
+        :valueOptions="valueOptions"
         @filters-changed="handleFiltersChange"
       />
       <!-- Map -->
@@ -34,7 +36,9 @@ export default {
   },
   data() {
     return {
-      filterOptions: null,
+      stageOptions: null,
+      titleOptions: null,
+      valueOptions: null,
       geojsonData: null,
       // A copy of original data so filters can be reset.
       originalGeojsonData: null,
@@ -45,13 +49,20 @@ export default {
     handleFiltersChange(filters) {
       // Now filter data and update the map.
       this.geojsonData.features = this.originalGeojsonData.features.filter((item) => {
+        const project = { ...item.properties.project };
         if (filters.stages && filters.stages.length > 0) {
-          if (filters.stages.includes(item.properties.project.Stage) === false) {
+          if (filters.stages.includes(project.Stage) === false) {
             return false;
           }
         }
         if (filters.title) {
-          if (item.properties.project.Title.startsWith(filters.title) === false) {
+          if (project.Title.startsWith(filters.title) === false) {
+            return false;
+          }
+        }
+        if (filters.valueRange) {
+          const currentValue = parseInt(project.Value, 10);
+          if (currentValue < filters.valueRange[0] || currentValue > filters.valueRange[1]) {
             return false;
           }
         }
@@ -69,27 +80,56 @@ export default {
       return;
     }
 
+    // Basic structure check.
+    if (!response.data || !response.data.features || !response.data.features.length) {
+      this.showError = true;
+      return;
+    }
+
     // Save a original copy of data for filters reset later.
     this.originalGeojsonData = { ...response.data };
 
     // Pass data to map component to render.
     this.geojsonData = response.data;
 
-    // Get stages filter options. e.g DA approval.
+    // Set stages filter options. e.g DA approval.
     const stages = {};
     response.data.features.forEach((element) => {
+      // Find unique stage.
       stages[element.properties.project.Stage] = true;
     });
-    // Get stages filter options. e.g DA approval.
+    // Convert it to array.
+    const sortedStages = Object.keys(stages);
+    sortedStages.sort();
+    this.stageOptions = sortedStages.map((element) => ({
+      text: element,
+      value: element,
+    }));
+
+    // Set stages filter options. e.g DA approval.
     const titles = {};
     response.data.features.forEach((element) => {
       titles[element.properties.project.Title] = true;
     });
-    // Set all filter options to the bar.
-    this.filterOptions = {
-      stages: Object.keys(stages),
-      titles: Object.keys(titles),
-    };
+    this.titleOptions = Object.keys(titles);
+    this.titleOptions.sort();
+
+    // Set value range filter options.
+    const values = { min: null, max: null, interval: 1 };
+    if (response.data.features[0].properties.project.Value) {
+      values.min = parseInt(response.data.features[0].properties.project.Value, 10);
+      values.max = values.min;
+    }
+    response.data.features.forEach((element) => {
+      const value = parseInt(element.properties.project.Value, 10);
+      if (value < values.min) {
+        values.min = value;
+      }
+      if (value > values.max) {
+        values.max = value;
+      }
+    });
+    this.valueOptions = values;
   },
 };
 </script>

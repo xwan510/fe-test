@@ -7,24 +7,24 @@ const mountFiltersBar = (options) => {
   const localVue = createLocalVue();
   localVue.use(BootstrapVue);
   return mount(FiltersBar, {
-    propsData: { options },
+    propsData: options,
     localVue,
   });
 }
 
 describe('FiltersBar.vue', () => {
 
-  it('renders props.options.stages when passed', () => {
+  it('renders props.stagesOptions when passed', () => {
     const options = {
-      stages: ['stage1', 'stage2'],
+      stageOptions: ['stage1', 'stage2'],
     };
     const wrapper = mountFiltersBar(options);
     expect(wrapper.text()).toMatch('stage2');
   });
 
-  it('renders props.options.titles when passed', () => {
+  it('renders props.titleOptions when passed', () => {
     const options = {
-      titles: ['title1', 'title2'],
+      titleOptions: ['title1', 'title2'],
     };
     const wrapper = mountFiltersBar(options);
     expect(wrapper.text()).toMatch('title1');
@@ -32,7 +32,7 @@ describe('FiltersBar.vue', () => {
 
   it('emits filter values when form submits', () => {
     const options = {
-      titles: ['title1', 'title2'],
+      titleOptions: ['title1', 'title2'],
     };
     const wrapper = mountFiltersBar(options);
     wrapper.find('form').trigger("submit");
@@ -42,7 +42,7 @@ describe('FiltersBar.vue', () => {
 
   it('emits correct filter values for title', () => {
     const options = {
-      titles: ['title1', 'title2'],
+      titleOptions: ['title1', 'title2'],
     };
     const wrapper = mountFiltersBar(options);
     wrapper.setData({title: 'title1'});
@@ -53,7 +53,7 @@ describe('FiltersBar.vue', () => {
 
   it('emits correct filter values for stage', () => {
     const options = {
-      stages: ['stage1', 'stage2'],
+      stageOptions: ['stage1', 'stage2'],
     };
     const wrapper = mountFiltersBar(options);
     wrapper.setData({stages: ['stage1', 'stage2']});

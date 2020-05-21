@@ -3,17 +3,17 @@
     <b-button v-b-toggle.sidebar-1 class="fixed-top filter-button btn-md">Filters</b-button>
     <b-sidebar id="sidebar-1" title="Apply Filters" width="250px" shadow>
       <div class="px-4 py-3" id="x">
-        <b-form @submit="onSubmit" >
+        <b-form @submit="onSubmit" @reset="onReset" >
           <!-- DA Stage -->
           <b-form-group label="DA Stages">
             <b-form-checkbox-group
               id="stage-input"
               v-model="stages"
-              :options="filterOptions.stages"
+              :options="stageOptions"
               plain
               stacked
               name="da-approval"
-              @change="onSubmit"
+              @input="onSubmit"
             ></b-form-checkbox-group>
           </b-form-group>
           <!-- Title -->
@@ -28,11 +28,22 @@
             ></b-form-input>
             <datalist id="title-list-id">
               <option
-                v-for="(title, index) in filterOptions.titles"
+                v-for="(title, index) in titleOptions"
                 :key="index">{{ title }}
               </option>
             </datalist>
           </b-form-group>
+          <!-- Title -->
+          <b-form-group label="Value Range">
+            <vue-slider
+              v-model="valueRange"
+              :min="valueOptions ? valueOptions.min : 0"
+              :max="valueOptions ? valueOptions.max : 100"
+              :interval="valueOptions ? valueOptions.interval : 1"
+              @drag-end="onSubmit"
+            ></vue-slider>
+          </b-form-group>
+          <b-button type="reset" variant="danger">Reset</b-button>
         </b-form>
       </div>
     </b-sidebar>
@@ -40,38 +51,28 @@
 </template>
 
 <script>
+import VueSlider from 'vue-slider-component';
+import 'vue-slider-component/theme/antd.css';
+
 export default {
   name: 'FiltersBar',
+  components: {
+    VueSlider,
+  },
   props: {
-    options: Object,
+    stageOptions: Array,
+    titleOptions: Array,
+    valueOptions: Object,
   },
   data() {
+    const minValue = this.valueOptions ? this.valueOptions.min : 0;
+    const maxValue = this.valueOptions ? this.valueOptions.max : 100;
     return {
-      // Form values to submit to parent.
+      // Default filter values.
       title: null,
       stages: [],
+      valueRange: [minValue, maxValue],
     };
-  },
-  computed: {
-    // Available options to populate the form.
-    filterOptions() {
-      // DA Approval stages.
-      let stages = null;
-      if (this.options.stages) {
-        stages = this.options.stages.map((element) => ({
-          text: element,
-          value: element,
-        }));
-      }
-      // Titles.
-      const titles = this.options.titles ? this.options.titles : null;
-
-      const options = {
-        stages,
-        titles,
-      };
-      return options;
-    },
   },
   methods: {
     toUpperCase(value) {
@@ -81,8 +82,14 @@ export default {
       const data = {
         stages: this.stages,
         title: this.title,
+        valueRange: this.valueRange,
       };
       this.$emit('filters-changed', data);
+    },
+    onReset() {
+      this.title = null;
+      this.stages = [];
+      this.valueRange = [this.valueOptions.min, this.valueOptions.max];
     },
   },
 };
@@ -91,8 +98,8 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
   .filter-button {
-    width: 150px;
-    top: 10%;
+    width: 160px;
+    top: 12%;
     left: 1.5%;
   }
   div /deep/ .col-form-label {

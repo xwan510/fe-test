@@ -23,6 +23,7 @@ beforeEach(() => {
             project: {
               Stage: 'DA Approved',
               Title: 'HELLENIC CLUB',
+              Value: '10.000',
             }
           }
         },
@@ -32,6 +33,17 @@ beforeEach(() => {
             project: {
               Stage: 'DA Pending',
               Title: 'WESTPAC PLACE',
+              Value: '100.000',
+            }
+          }
+        },
+        {
+          type: 'Feature',
+          properties: {
+            project: {
+              Stage: 'DA Approved',
+              Title: 'WOW',
+              Value: '1.000',
             }
           }
         },
@@ -76,18 +88,44 @@ describe('App.vue', () => {
     });
   });
 
+  it('handles empty invalid data', (done) => {
+    // To mock failed response, we can remount App with failed mock fetch.
+    axios.get.mockImplementation(() => Promise.resolve({ status: 200, data: {} }));
+    const localVue = createLocalVue();
+    localVue.use(BootstrapVue);
+    const wrapper = shallowMount(App, { localVue });
+    wrapper.vm.$nextTick(() => {
+      expect(wrapper.vm.showError).toEqual(true);
+      done();
+    });
+  });
+
   it('converts geojson to filter options', (done) => {
     wrapper.vm.$nextTick(() => {
-      expect(wrapper.vm.filterOptions.stages)
-        .toEqual(expect.arrayContaining(['DA Approved', 'DA Pending']));
+      const toMatchData = [{"text": "DA Approved", "value": "DA Approved"}, {"text": "DA Pending", "value": "DA Pending"}];
+      expect(wrapper.vm.stageOptions)
+        .toMatchObject(toMatchData);
       done();
     });
   });
 
   it('converts title to filter options', (done) => {
     wrapper.vm.$nextTick(() => {
-      expect(wrapper.vm.filterOptions.titles)
-        .toEqual(expect.arrayContaining(['HELLENIC CLUB', 'WESTPAC PLACE']));
+      expect(wrapper.vm.titleOptions)
+        .toEqual(expect.arrayContaining(['HELLENIC CLUB', 'WESTPAC PLACE', 'WOW']));
+      done();
+    });
+  });
+
+  it('converts value to filter options', (done) => {
+    wrapper.vm.$nextTick(() => {
+      const toMatchData = {
+        min: 1,
+        max: 100,
+        interval: 1,
+      };
+      expect(wrapper.vm.valueOptions)
+        .toMatchObject(toMatchData);
       done();
     });
   });
@@ -109,9 +147,21 @@ describe('App.vue', () => {
       const filters = { stages: ['DA Approved'] };
       wrapper.vm.handleFiltersChange(filters);
       expect(wrapper.vm.geojsonData.features)
-        .toHaveLength(1);
+        .toHaveLength(2);
       expect(wrapper.vm.geojsonData.features[0].properties.project.Stage)
         .toEqual('DA Approved');
+      done();
+    });
+  });
+
+  it('filters source json for value range', (done) => {
+    wrapper.vm.$nextTick(() => {
+      const filters = { valueRange: [10, 50] };
+      wrapper.vm.handleFiltersChange(filters);
+      expect(wrapper.vm.geojsonData.features)
+        .toHaveLength(1);
+      expect(wrapper.vm.geojsonData.features[0].properties.project.Value)
+        .toEqual('10.000');
       done();
     });
   });
@@ -126,7 +176,7 @@ describe('App.vue', () => {
       const newfilters = {};
       wrapper.vm.handleFiltersChange(newfilters);
       expect(wrapper.vm.geojsonData.features)
-        .toHaveLength(2);
+        .toHaveLength(3);
       done();
     });
   });
