@@ -3,6 +3,7 @@
 [![Build Status](https://scrutinizer-ci.com/g/xwan510/fe-test/badges/build.png?b=master)](https://scrutinizer-ci.com/g/xwan510/fe-test/build-status/master)
 
 This is a test project using Vue + Mapbox to showcase map interactions with geojson source data.
+
 Live site is deployed to netlify [here](https://5ec66560cc94270006009900--serene-shirley-97e865.netlify.app/)
 
 ## Design considerations
@@ -21,6 +22,8 @@ In reality, geojson file might be pretty large. Performance and UX must be consi
 In FiltersBar.vue, filter values will be emitted to parent App.vue. Debouncing strategy is used to avoid intensive unnecessary applying of filters to map, such as user dragging slider bar.
 
 Mobile responsive design is tested. HTML 5 sematic syntax is used.
+
+Basic unit tests and CI is in place. Production might need further E2E tests though.
 
 ## Installation
 

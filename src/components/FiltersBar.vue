@@ -85,7 +85,6 @@ export default {
         title: this.title,
         valueRange: this.valueRange,
       };
-      console.log('here');
       this.$emit('filters-changed', data);
     }, 200),
     onReset() {

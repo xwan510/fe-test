@@ -143,6 +143,7 @@ export default {
   }
   #app #app-header {
     text-align: left;
-    padding: 2%;
+    padding: 1%;
+    height: 8vh;
   }
 </style>
