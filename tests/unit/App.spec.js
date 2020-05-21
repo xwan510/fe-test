@@ -82,7 +82,7 @@ describe('App.vue', () => {
     localVue.use(BootstrapVue);
     const myWrapper = shallowMount(App, { localVue });
     myWrapper.vm.$nextTick(() => {
-      expect(wrapper.vm.showError).toEqual(true);
+      expect(myWrapper.vm.showError).toEqual(true);
       done();
     });
   });
@@ -94,7 +94,7 @@ describe('App.vue', () => {
     localVue.use(BootstrapVue);
     const myWrapper = shallowMount(App, { localVue });
     myWrapper.vm.$nextTick(() => {
-      expect(wrapper.vm.showError).toEqual(true);
+      expect(myWrapper.vm.showError).toEqual(true);
       done();
     });
   });
