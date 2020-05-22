@@ -100,8 +100,8 @@ export default {
 <style scoped>
   .filter-button {
     width: 160px;
-    top: 10%;
-    left: 1.5%;
+    top: 80px;
+    left: 10px;
   }
   div /deep/ .col-form-label {
     font-weight: bold;

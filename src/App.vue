@@ -140,10 +140,11 @@ export default {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     color: #2c3e50;
+    min-width: 300px;
   }
   #app #app-header {
     text-align: left;
-    padding: 1%;
-    height: 8vh;
+    padding: 5px;
+    height: 60px;
   }
 </style>
