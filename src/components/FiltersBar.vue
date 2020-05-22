@@ -100,7 +100,7 @@ export default {
 <style scoped>
   .filter-button {
     width: 160px;
-    top: 80px;
+    top: 75px;
     left: 10px;
   }
   div /deep/ .col-form-label {
