@@ -79,7 +79,7 @@ export default {
     toUpperCase(value) {
       return value.toUpperCase();
     },
-    onSubmit: _.debounce(function () {
+    onSubmit: _.debounce(function emitData() {
       const data = {
         stages: this.stages,
         title: this.title,
