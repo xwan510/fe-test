@@ -13,15 +13,6 @@ const mountFiltersBar = (options) => {
 };
 
 describe('FiltersBar.vue', () => {
-  it('renders correctly', () => {
-    const options = {
-      stageOptions: ['stage1', 'stage2'],
-      titleOptions: ['title1', 'title2'],
-    };
-    const wrapper = mountFiltersBar(options);
-    expect(wrapper.element).toMatchSnapshot();
-  });
-
   it('renders props.stagesOptions when passed', () => {
     const options = {
       stageOptions: ['stage1', 'stage2'],
