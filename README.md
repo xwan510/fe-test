@@ -45,3 +45,8 @@ npm run serve
 npm run test:unit
 ```
 
+#### Linting with Airbnb preset
+
+```
+npm run lint
+```

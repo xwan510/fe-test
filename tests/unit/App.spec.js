@@ -68,7 +68,7 @@ afterEach(() => {
 
 // Tests start.
 describe('App.vue', () => {
-   it('fetches geojson file when mounted', (done) => {
+  it('fetches geojson file when mounted', (done) => {
     wrapper.vm.$nextTick(() => {
       expect(wrapper.vm.geojsonData).toBeTruthy();
       done();
