@@ -40,10 +40,6 @@ afterEach(() => {
 });
 
 describe('Map.vue', () => {
-  it('renders correctly as snapshot', () => {
-    expect(wrapper.element).toMatchSnapshot();
-  });
-
   it('converts props.geojsonData to computed data', () => {
     const toMatchData = {
       type: 'geojson',
